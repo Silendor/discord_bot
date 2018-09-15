@@ -2,9 +2,11 @@
 import discord
 import os
 
-def set_environment_variable_token():
+secret='DISCORD_BOT_SECRET'
+
+def initialize_token():
     with open('.env', 'r') as filetype:
-        os.environ['DISCORD_BOT_SECRET'] = filetype.read()
+        os.environ[secret] = filetype.read()
 
 client = discord.Client()
 
@@ -15,9 +17,12 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author != client.user:
-        await client.send_message(message.channel, message.content[::-1])
+    # if message.author != client.user:
+    #     await client.send_message(message.channel, message.content[::-1])
+    if message.content.startswith('!hello'):
+        msg = 'Hello {0.author.mention}'.format(message)
+        await client.send_message(message.channel, msg)
 
-set_environment_variable_token()
-token = os.environ.get("DISCORD_BOT_SECRET")
+initialize_token()
+token = os.environ.get(secret)
 client.run(token)
