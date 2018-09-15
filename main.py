@@ -6,7 +6,7 @@ secret='DISCORD_BOT_SECRET'
 
 def initialize_token():
     with open('.env', 'r') as filetype:
-        os.environ[secret] = filetype.read()
+        os.environ[secret] = filetype.read().strip()
 
 client = discord.Client()
 
