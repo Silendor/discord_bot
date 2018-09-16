@@ -12,8 +12,10 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    print("I'm in")
-    print(client.user)
+    await client.change_presence(game=Game(name="with humans"))
+    print("Logged in as " + client.user.name)
+    # print("I'm in")
+    # print(client.user)
 
 @client.event
 async def on_message(message):
