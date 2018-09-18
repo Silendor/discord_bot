@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import discord
+from discord.ext import commands
 import os
 
 secret='DISCORD_BOT_SECRET'
@@ -9,6 +10,7 @@ def initialize_token():
         os.environ[secret] = filetype.read().strip()
 
 client = discord.Client()
+bot = commands.Bot(command_prefix='!', description='Newsletter bot')
 
 @client.event
 async def on_ready():
@@ -27,6 +29,10 @@ async def on_message(message):
     if message.content.startswith('!hello'):
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
+
+@bot.command()
+async def cat(ctx):
+    await ctx.send("https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif")
 
 initialize_token()
 token = os.environ.get(secret)
