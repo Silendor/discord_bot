@@ -12,9 +12,15 @@ from discord.ext.commands import Bot
 secret='DISCORD_BOT_SECRET'
 description = '''Simple bot'''
 
-# set up logging
+'''
+set up logging level:
+CRITICAL
+ERROR
+WARNING
+INFO
+DEBUG
+'''
 # log output to console:
-# logging.basicConfig(level=logging.DEBUG)
 # logging.basicConfig(level=logging.ERROR)
 # log to file:
 logger = logging.getLogger('discord')
