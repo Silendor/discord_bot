@@ -31,10 +31,23 @@ def get_season_info(shard, api_key):
         season_id = 'Not Found'
     return season_id
 
-def get_general_stat_info(shard, player_id, season_id, api_key):
+def get_general_stat_info(shard, player_id, season_id, api_key, 
+                            interest_mode, interest_items):
     url_stat = 'https://api.pubg.com/shards/{}/players/{}/seasons/{}'.format(shard, player_id, season_id)
     general_info = api_call(url_stat, api_key)
-    for key in general_info['data']['attributes']['gameModeStats']:
-        print(key)
-        print(general_info['data']['attributes']['gameModeStats'][key])
-    return 'Not Found'
+
+    result = {}
+    items_dict = {}
+    for mode in interest_mode:
+        for item in interest_items:
+            value = general_info['data']['attributes']['gameModeStats'][mode].get(item)
+            # add smilies
+            if item == 'suicides':
+                item += ' :skull:'
+            
+            items_dict[item] = str(value)
+        result[mode] = [items_dict]
+    if value:
+        return result
+    else:
+        return 'Not Found'

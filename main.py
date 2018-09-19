@@ -24,6 +24,7 @@ bot = commands.Bot(command_prefix='!', description=description)
 @bot.event
 async def on_ready():
     # await bot.change_presence(game=discord.Game(name="с людишками"))
+    await bot.change_presence(game=discord.Game(name="в разработку"))
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
@@ -72,6 +73,12 @@ async def repeat(times : int, content='repeating...'):
 @bot.command()
 async def opgg(player_name=' '):
     """Отдаёт статистику pubg по никнейму"""
+
+    interest_mode = ('squad-fpp',)
+    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
+                'longestKill', 'maxKillStreaks', 'roundMostKills', 
+                'suicides', 'vehicleDestroys')
+
     if player_name is ' ':
         await bot.say('Укажи никнейм')
     else:
@@ -85,9 +92,14 @@ async def opgg(player_name=' '):
             if season_id == 'Not Found':
                 await bot.say('Актуальный сезон не обнаружен')
             else:
-                general_info = bf.get_general_stat_info(shard, player_id, season_id, api_key)
+                general_info = bf.get_general_stat_info(shard, player_id, season_id, api_key, interest_mode, interest_items)
                 if general_info == 'Not Found':
                     await bot.say('Никнейм найден, актуальный сезон найден, статистика почему-то недоступна :cry:')
+                else:
+                    for mode in general_info:
+                        await bot.say(mode.capitalize() + ':')
+                        for key, value in general_info[mode][0].items():
+                            await bot.say(key + ' - ' + str(value))
 
 ################################################################
 # $experimental
