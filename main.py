@@ -72,18 +72,18 @@ async def btc():
 # ^experimental
 ################################################################
 
-@bot.command()
-async def opgg():
-    """Отдаёт статистику pubg по никнейму"""
-    api_key = os.environ.get('PUBG_API_SECRET')
-    url = "https://api.pubg.com/shards/$platform-region-shard/players?filter[playerNames]=$player-name"
+# @bot.command()
+# async def opgg():
+#     """Отдаёт статистику pubg по никнейму"""
+#     api_key = os.environ.get('PUBG_API_SECRET')
+#     url = "https://api.pubg.com/shards/$platform-region-shard/players?filter[playerNames]=$player-name"
 
-    header = {
-        "Authorization": "Bearer <api-key>",
-        "Accept": "application/vnd.api+json"
-        }
+#     header = {
+#         "Authorization": "Bearer <api-key>",
+#         "Accept": "application/vnd.api+json"
+#         }
 
-    r = requests.get(url, headers=header)
+#     r = requests.get(url, headers=header)
 
 
 ################################################################
