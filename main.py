@@ -3,13 +3,11 @@ import os
 import logging
 import json
 import aiohttp
-import asyncio
+# import asyncio
 import discord
-from discord import Game
-# from discord.ext import commands
-from discord.ext.commands import Bot
+from discord.ext import commands
 
-secret='DISCORD_BOT_SECRET'
+secret = 'DISCORD_BOT_SECRET'
 description = '''Simple bot'''
 
 '''
@@ -34,42 +32,59 @@ def initialize_token():
         os.environ[secret] = filetype.read().strip()
 
 # client = discord.Client()
-client = Bot(command_prefix='$', description=description)
+bot = commands.Bot(command_prefix='!', description=description)
 
-@client.event
+@bot.event
 async def on_ready():
-    # await client.change_presence(game=Game(name="с людишками"))
+    # await bot.change_presence(game=discord.Game(name="с людишками"))
     print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
+    print(bot.user.name)
+    print(bot.user.id)
     print('------')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    # if message.author != client.user:
-    #     await client.send_message(message.channel, message.content[::-1])
+@bot.command()
+async def hello(member : discord.Member):
+    """Поднимает самооценку"""
+    answer = 'Ты классный, {0.name} :thumbsup:'.format(member)
+    await bot.say(answer)
 
-    if message.content.startswith('?help'):
-        await client.send_message(message.channel, msg)
-################################################################
-# experimental
-################################################################
-url = 'https://pubg.op.gg/user/Silendor?server=pc-ru'
+@bot.command()
+async def add(left : int, right : int):
+    """Adds two numbers together."""
+    await bot.say(left + right)
 
-@client.command()
-async def bitcoin():
+@bot.command()
+async def btc():
+    """Выводит текущий курс биткоина к доллару"""
     url = 'https://api.coindesk.com/v1/bpi/currentprice/BTC.json'
     async with aiohttp.ClientSession() as session:  # Async HTTP request
         raw_response = await session.get(url)
         response = await raw_response.text()
         response = json.loads(response)
-        await client.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
+        await bot.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
+
+# on_message() ловит все сообщения и блокирует .command()
+# @client.event
+# async def on_message(message):
+#     if message.author == client.user:
+#         return
+#     if message.content.startswith('!hello'):
+#         answer = 'Ты классный, {0.author.mention} :thumbsup:'.format(message)
+#         await client.send_message(message.channel, answer)
 
 ################################################################
-# /experimental
+# ^experimental
+################################################################
+# @bot.command()
+# async def opgg():
+#     url = ''
+#     """Отдаёт статистику pubg по никнейму"""
+#     pass
+
+
+################################################################
+# $experimental
 ################################################################
 initialize_token()
 token = os.environ.get(secret)
-client.run(token)
+bot.run(token)
