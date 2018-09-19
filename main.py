@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import json
+import requests
 import aiohttp
 # import asyncio
 import discord
@@ -9,14 +10,14 @@ from dotenv import load_dotenv
 
 # custom libraries
 from bot_logging import Bot_Logging
+import functions as bf 
 
-# 
+# log settings
 logger_target = 'discord'
 log_level = 'DEBUG'
 discord_log = Bot_Logging(logger_target, log_level)
 discord_log.log_to_file()
 
-# client = discord.Client()
 description = '''Simple bot'''
 bot = commands.Bot(command_prefix='!', description=description)
 
@@ -49,6 +50,12 @@ async def btc():
         response = json.loads(response)
         await bot.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
 
+@bot.command()
+async def repeat(times : int, content='repeating...'):
+    """Repeats a message multiple times."""
+    for i in range(times):
+        await bot.say(content)
+
 # on_message() ловит все сообщения и блокирует .command()
 # @client.event
 # async def on_message(message):
@@ -62,19 +69,25 @@ async def btc():
 # ^experimental
 ################################################################
 
-# @bot.command()
-# async def opgg():
-#     """Отдаёт статистику pubg по никнейму"""
-#     api_key = os.environ.get('PUBG_API_SECRET')
-#     url = "https://api.pubg.com/shards/$platform-region-shard/players?filter[playerNames]=$player-name"
-
-#     header = {
-#         "Authorization": "Bearer <api-key>",
-#         "Accept": "application/vnd.api+json"
-#         }
-
-#     r = requests.get(url, headers=header)
-
+@bot.command()
+async def opgg(player_name=' '):
+    """Отдаёт статистику pubg по никнейму"""
+    if player_name is ' ':
+        await bot.say('Укажи никнейм')
+    else:
+        api_key = os.environ.get('PUBG_API_SECRET')
+        shard = 'pc-ru'       
+        player_id = bf.get_player_info(shard, player_name, api_key)
+        if player_id == 'Not Found':
+            await bot.say('Такой ник не найден в базе')
+        else:
+            season_id = bf.get_season_info(shard, api_key)
+            if season_id == 'Not Found':
+                await bot.say('Актуальный сезон не обнаружен')
+            else:
+                general_info = bf.get_general_stat_info(shard, player_id, season_id, api_key)
+                if general_info == 'Not Found':
+                    await bot.say('Никнейм найден, актуальный сезон найден, статистика почему-то недоступна :cry:')
 
 ################################################################
 # $experimental
