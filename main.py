@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import os
-import logging
 import json
 import aiohttp
 # import asyncio
@@ -8,26 +7,17 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-description = '''Simple bot'''
+# custom libraries
+from bot_logging import Bot_Logging
 
-'''
-set up logging level:
-CRITICAL
-ERROR
-WARNING
-INFO
-DEBUG
-'''
-# log output to console:
-# logging.basicConfig(level=logging.ERROR)
-# log to file:
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+# 
+logger_target = 'discord'
+log_level = 'DEBUG'
+discord_log = Bot_Logging(logger_target, log_level)
+discord_log.log_to_file()
 
 # client = discord.Client()
+description = '''Simple bot'''
 bot = commands.Bot(command_prefix='!', description=description)
 
 @bot.event
