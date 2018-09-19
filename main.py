@@ -2,6 +2,7 @@
 import os
 import json
 import requests
+import random
 import aiohttp
 # import asyncio
 import discord
@@ -18,7 +19,7 @@ log_level = 'DEBUG'
 discord_log = Bot_Logging(logger_target, log_level)
 discord_log.log_to_file()
 
-description = '''Simple bot'''
+description = '''Simple newsletter bot'''
 bot = commands.Bot(command_prefix='!', description=description)
 
 @bot.event
@@ -30,16 +31,18 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-@bot.command()
-async def hello(member : discord.Member):
-    """Поднимает самооценку"""
-    answer = 'Ты классный, {0.name} :thumbsup:'.format(member)
-    await bot.say(answer)
-
-# @bot.command()
-# async def add(left : int, right : int):
-#     """Adds two numbers together."""
-#     await bot.say(left + right)
+@bot.command(pass_context=True)
+async def hello(context):
+    """Поднимает настроение"""
+    possible_responses = [
+        'Ты классный, {} :thumbsup:'.format(context.message.author.mention),
+        'Весь мир вертится вокруг тебя, {} :earth_asia:'.format(context.message.author.mention),
+        'За тобой выехали, {} :spy:'.format(context.message.author.mention),
+        'Сегодня повезёт, {} :four_leaf_clover:'.format(context.message.author.mention),
+        'Сегодня забухаем в :poop:, {}'.format(context.message.author.mention),
+        'Мне нечего тебе сказать, {} :robot:'.format(context.message.author.mention),
+    ]
+    await bot.say(random.choice(possible_responses))
 
 @bot.command()
 async def btc():
@@ -50,12 +53,6 @@ async def btc():
         response = await raw_response.text()
         response = json.loads(response)
         await bot.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
-
-# @bot.command()
-# async def repeat(times : int, content='repeating...'):
-#     """Repeats a message multiple times."""
-#     for i in range(times):
-#         await bot.say(content)
 
 @bot.command()
 async def opgg(player_name=' '):
@@ -88,15 +85,6 @@ async def opgg(player_name=' '):
                         for key, value in general_info[mode][0].items():
                             await bot.say(key + ' - ' + str(value))
 
-# on_message() ловит все сообщения и блокирует .command()
-# @client.event
-# async def on_message(message):
-#     if message.author == client.user:
-#         return
-#     if message.content.startswith('!hello'):
-#         answer = 'Ты классный, {0.author.mention} :thumbsup:'.format(message)
-#         await client.send_message(message.channel, answer)
-
 ################################################################
 # ^experimental
 ################################################################
@@ -105,8 +93,9 @@ async def opgg(player_name=' '):
 ################################################################
 # $experimental
 ################################################################
+
 # initialize environment settings
 load_dotenv()
-
 token = os.environ.get('DISCORD_BOT_SECRET')
+# start bot
 bot.run(token)
