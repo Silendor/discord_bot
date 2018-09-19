@@ -6,8 +6,8 @@ import aiohttp
 # import asyncio
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
-secret = 'DISCORD_BOT_SECRET'
 description = '''Simple bot'''
 
 '''
@@ -26,10 +26,6 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
-
-def initialize_token():
-    with open('.env', 'r') as filetype:
-        os.environ[secret] = filetype.read().strip()
 
 # client = discord.Client()
 bot = commands.Bot(command_prefix='!', description=description)
@@ -75,16 +71,26 @@ async def btc():
 ################################################################
 # ^experimental
 ################################################################
-# @bot.command()
-# async def opgg():
-#     url = ''
-#     """Отдаёт статистику pubg по никнейму"""
-#     pass
+
+@bot.command()
+async def opgg():
+    """Отдаёт статистику pubg по никнейму"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    url = "https://api.pubg.com/shards/$platform-region-shard/players?filter[playerNames]=$player-name"
+
+    header = {
+        "Authorization": "Bearer <api-key>",
+        "Accept": "application/vnd.api+json"
+        }
+
+    r = requests.get(url, headers=header)
 
 
 ################################################################
 # $experimental
 ################################################################
-initialize_token()
-token = os.environ.get(secret)
+# initialize environment settings
+load_dotenv()
+
+token = os.environ.get('DISCORD_BOT_SECRET')
 bot.run(token)
