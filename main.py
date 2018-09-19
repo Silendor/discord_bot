@@ -36,10 +36,10 @@ async def hello(member : discord.Member):
     answer = 'Ты классный, {0.name} :thumbsup:'.format(member)
     await bot.say(answer)
 
-@bot.command()
-async def add(left : int, right : int):
-    """Adds two numbers together."""
-    await bot.say(left + right)
+# @bot.command()
+# async def add(left : int, right : int):
+#     """Adds two numbers together."""
+#     await bot.say(left + right)
 
 @bot.command()
 async def btc():
@@ -51,24 +51,11 @@ async def btc():
         response = json.loads(response)
         await bot.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
 
-@bot.command()
-async def repeat(times : int, content='repeating...'):
-    """Repeats a message multiple times."""
-    for i in range(times):
-        await bot.say(content)
-
-# on_message() ловит все сообщения и блокирует .command()
-# @client.event
-# async def on_message(message):
-#     if message.author == client.user:
-#         return
-#     if message.content.startswith('!hello'):
-#         answer = 'Ты классный, {0.author.mention} :thumbsup:'.format(message)
-#         await client.send_message(message.channel, answer)
-
-################################################################
-# ^experimental
-################################################################
+# @bot.command()
+# async def repeat(times : int, content='repeating...'):
+#     """Repeats a message multiple times."""
+#     for i in range(times):
+#         await bot.say(content)
 
 @bot.command()
 async def opgg(player_name=' '):
@@ -100,6 +87,20 @@ async def opgg(player_name=' '):
                         await bot.say(mode.capitalize() + ':')
                         for key, value in general_info[mode][0].items():
                             await bot.say(key + ' - ' + str(value))
+
+# on_message() ловит все сообщения и блокирует .command()
+# @client.event
+# async def on_message(message):
+#     if message.author == client.user:
+#         return
+#     if message.content.startswith('!hello'):
+#         answer = 'Ты классный, {0.author.mention} :thumbsup:'.format(message)
+#         await client.send_message(message.channel, answer)
+
+################################################################
+# ^experimental
+################################################################
+
 
 ################################################################
 # $experimental
