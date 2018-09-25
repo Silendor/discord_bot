@@ -27,12 +27,13 @@ def get_player_info(api_key, shard, player_name):
 def get_season_info(api_key, shard):
     '''get info about current season'''
     url_season = "https://api.pubg.com/shards/{}/seasons".format(shard)
-    season_info = api_call(api_key, url_season)
-    season_num = len(season_info['data'])
-    if season_info['data'][season_num-1]['attributes']['isCurrentSeason']:
-        season_id = season_info['data'][season_num-1]['id']
-    else:
-        season_id = 'Not Found'
+    season_id = 'division.bro.official.2018-09'
+    # season_info = api_call(api_key, url_season)
+    # season_num = len(season_info['data'])
+    # if season_info['data'][season_num-1]['attributes']['isCurrentSeason']:
+    #     season_id = season_info['data'][season_num-1]['id']
+    # else:
+    #     season_id = 'Not Found'
     return season_id
 
 def get_general_stat_info(api_key, shard, player_id, season_id,
