@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
 import json
-import requests
+# import requests
 import random
 import aiohttp
 # import asyncio
@@ -53,37 +53,86 @@ async def btc():
         response = await raw_response.text()
         response = json.loads(response)
         await bot.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
-
+####
+# PUBG
+####
 @bot.command()
-async def opgg(player_name=' '):
-    """Отдаёт статистику pubg по никнейму"""
-
+async def squadfpp(player_name=' '):
+    """pubg Cтатистика squad-fpp игр по никнейму (RU)"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    shard = 'pc-ru'
+    # shard = 'pc-eu'
     interest_mode = ('squad-fpp',)
     interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    if player_name is ' ':
-        await bot.say('Укажи никнейм')
-    else:
-        api_key = os.environ.get('PUBG_API_SECRET')
-        shard = 'pc-ru'       
-        player_id = bf.get_player_info(shard, player_name, api_key)
-        if player_id == 'Not Found':
-            await bot.say('Такой ник не найден в базе')
-        else:
-            season_id = bf.get_season_info(shard, api_key)
-            if season_id == 'Not Found':
-                await bot.say('Актуальный сезон не обнаружен')
-            else:
-                general_info = bf.get_general_stat_info(shard, player_id, season_id, api_key, interest_mode, interest_items)
-                if general_info == 'Not Found':
-                    await bot.say('Никнейм найден, актуальный сезон найден, статистика почему-то недоступна :cry:')
-                else:
-                    for mode in general_info:
-                        await bot.say(mode.capitalize() + ':')
-                        for key, value in general_info[mode][0].items():
-                            await bot.say(key + ' - ' + str(value))
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+
+@bot.command()
+async def squad(player_name=' '):
+    """pubg Cтатистика squad-tpp игр по никнейму (RU)"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    shard = 'pc-ru'
+    # shard = 'pc-eu'
+    interest_mode = ('squad',)
+    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
+                'longestKill', 'maxKillStreaks', 'roundMostKills', 
+                'suicides', 'vehicleDestroys')
+
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+
+@bot.command()
+async def duofpp(player_name=' '):
+    """pubg Cтатистика duo-fpp игр по никнейму (RU)"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    shard = 'pc-ru'
+    # shard = 'pc-eu'
+    interest_mode = ('duo-fpp',)
+    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
+                'longestKill', 'maxKillStreaks', 'roundMostKills', 
+                'suicides', 'vehicleDestroys')
+
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+
+@bot.command()
+async def duo(player_name=' '):
+    """pubg Cтатистика duo-tpp игр по никнейму (RU)"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    shard = 'pc-ru'
+    # shard = 'pc-eu'
+    interest_mode = ('duo',)
+    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
+                'longestKill', 'maxKillStreaks', 'roundMostKills', 
+                'suicides', 'vehicleDestroys')
+
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+
+@bot.command()
+async def solofpp(player_name=' '):
+    """pubg Cтатистика solo-fpp игр по никнейму (RU)"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    shard = 'pc-ru'
+    # shard = 'pc-eu'
+    interest_mode = ('solo-fpp',)
+    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
+                'longestKill', 'maxKillStreaks', 'roundMostKills', 
+                'suicides', 'vehicleDestroys')
+
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+
+@bot.command()
+async def solo(player_name=' '):
+    """pubg Cтатистика solo-tpp игр по никнейму (RU)"""
+    api_key = os.environ.get('PUBG_API_SECRET')
+    shard = 'pc-ru'
+    # shard = 'pc-eu'
+    interest_mode = ('solo-fpp',)
+    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
+                'longestKill', 'maxKillStreaks', 'roundMostKills', 
+                'suicides', 'vehicleDestroys')
+
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
 
 ################################################################
 # ^experimental
