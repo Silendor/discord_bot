@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import asyncio
+import discord
 from beaker.cache import CacheManager
 from beaker.util import parse_cache_config_options
 
@@ -60,38 +61,69 @@ def get_general_stat_info(api_key, shard, player_id, season_id,
     items_dict = {}
     for mode in interest_mode:
         for item in interest_items:
-            value = str(general_info['data']['attributes']['gameModeStats'][mode].get(item))
+            value = general_info['data']['attributes']['gameModeStats'][mode].get(item)
             # add smilies
-            if item == 'suicides':
+            if item == 'winPoints':
+                item += ' :trophy:'
+            elif item == 'wins':
+                item += ' :first_place:'
+            if item == 'top10s':
+                item += ' :second_place:'
+                # item += ' :top:'
+            if item == 'assists':
+                item += ' :handshake:'
+            if item == 'longestKill':
+                item += ''
+            if item == 'maxKillStreaks':
+                item += ''
+            if item == 'roundMostKills':
+                item += ''
+            elif item == 'suicides':
                 item += ' :skull:'
+            elif item == 'vehicleDestroys':
+                item += ' :red_car:'
             
             items_dict[item] = str(value)
         result[mode] = [items_dict]
-    if value:
+    # переделать условие
+    if str(value):
         return result
     else:
         return 'Not Found'
 
-async def pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items):
+async def pubg_info(api_key, bot, shard, player_name, interest_mode, 
+                    interest_items, context):
     '''collect complex information about player'''
     if player_name is ' ':
-        await bot.say('Укажи никнейм')
+        answer = 'Укажи никнейм, {}'.format(context.message.author.mention)
+        await bot.say(answer)
     else:
         player_id = get_player_info(api_key, shard, player_name)
         if player_id == 'Not Found':
-            await bot.say('Такой ник не найден в базе')
+            answer = 'Такой ник не найден в базе, {}'.format(context.message.author.mention)
+            await bot.say(answer)
         else:
             season_id = get_season_info(api_key, shard)
             if season_id == 'Not Found':
-                await bot.say('Актуальный сезон не обнаружен')
+                answer = 'Актуальный сезон не обнаружен'
+                await bot.say(answer)
             else:
-                general_info = get_general_stat_info(api_key, shard, player_id, season_id, interest_mode, interest_items)
+                general_info = get_general_stat_info(api_key, shard, player_id, 
+                                                    season_id, interest_mode, 
+                                                    interest_items)
                 if general_info == 'Not Found':
-                    await bot.say('Никнейм найден, актуальный сезон найден, статистика почему-то недоступна :cry:')
+                    answer = 'Никнейм найден, актуальный сезон найден, статистика почему-то недоступна :cry:, {}'.format(context.message.author.mention)
+                    await bot.say(answer)
                 else:
                     for mode in general_info:
-                        await bot.say(mode.capitalize() + ':')
-                        # bot.say(mode.capitalize() + ':')
+                        title=mode
+                        if any(s in mode for s in ('squad-fpp', 'squad')):
+                            title += ' :family_mmbb:'
+                        elif any(s in mode for s in ('duo-fpp', 'duo')):
+                            title += ' :two_men_holding_hands:'
+                        elif any(s in mode for s in ('solo-fpp', 'solo')):
+                            title += ' :man:'
+                        em_answer = discord.Embed(title=title.capitalize(), description=player_name, color=0x50bdfe)
                         for key, value in general_info[mode][0].items():
-                            await bot.say(key + ' - ' + str(value))
-                            # bot.say(key + ' - ' + str(value))
+                            em_answer.add_field(name=key, value=value, inline=False)
+                    await bot.say(embed=em_answer)

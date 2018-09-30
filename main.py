@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 import os
 import json
-# import requests
 import random
 import aiohttp
-# import asyncio
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+# import requests
+# import asyncio
 
 # custom libraries
 from bot_logging import Bot_Logging
@@ -56,8 +56,8 @@ async def btc():
 ####
 # PUBG
 ####
-@bot.command()
-async def squadfpp(player_name=' '):
+@bot.command(pass_context=True)
+async def squadfpp(context, player_name=' '):
     """pubg Cтатистика squad-fpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
@@ -67,10 +67,10 @@ async def squadfpp(player_name=' '):
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command()
-async def squad(player_name=' '):
+@bot.command(pass_context=True)
+async def squad(context, player_name=' '):
     """pubg Cтатистика squad-tpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
@@ -80,10 +80,10 @@ async def squad(player_name=' '):
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command()
-async def duofpp(player_name=' '):
+@bot.command(pass_context=True)
+async def duofpp(context, player_name=' '):
     """pubg Cтатистика duo-fpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
@@ -93,10 +93,10 @@ async def duofpp(player_name=' '):
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command()
-async def duo(player_name=' '):
+@bot.command(pass_context=True)
+async def duo(context, player_name=' '):
     """pubg Cтатистика duo-tpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
@@ -106,10 +106,10 @@ async def duo(player_name=' '):
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command()
-async def solofpp(player_name=' '):
+@bot.command(pass_context=True)
+async def solofpp(context, player_name=' '):
     """pubg Cтатистика solo-fpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
@@ -119,10 +119,10 @@ async def solofpp(player_name=' '):
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command()
-async def solo(player_name=' '):
+@bot.command(pass_context=True)
+async def solo(context, player_name=' '):
     """pubg Cтатистика solo-tpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
@@ -132,12 +132,18 @@ async def solo(player_name=' '):
                 'longestKill', 'maxKillStreaks', 'roundMostKills', 
                 'suicides', 'vehicleDestroys')
 
-    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items)
+    await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 ################################################################
 # ^experimental
 ################################################################
-
+@bot.command(pass_context=True)
+async def test(context):
+    '''тестовый пункт меню для нового функционала'''
+    em = discord.Embed(title="Title", description="Desc", color=0x50bdfe)
+    em.add_field(name="Field1", value="hi", inline=False)
+    em.add_field(name="Field2", value="hi2", inline=False)
+    await bot.say(embed=em)
 
 ################################################################
 # $experimental
