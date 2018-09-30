@@ -63,26 +63,7 @@ def get_general_stat_info(api_key, shard, player_id, season_id,
         for item in interest_items:
             value = general_info['data']['attributes']['gameModeStats'][mode].get(item)
             # add smilies
-            if item == 'winPoints':
-                item += ' :trophy:'
-            elif item == 'wins':
-                item += ' :first_place:'
-            if item == 'top10s':
-                item += ' :second_place:'
-                # item += ' :top:'
-            if item == 'assists':
-                item += ' :handshake:'
-            if item == 'longestKill':
-                item += ''
-            if item == 'maxKillStreaks':
-                item += ''
-            if item == 'roundMostKills':
-                item += ''
-            elif item == 'suicides':
-                item += ' :skull:'
-            elif item == 'vehicleDestroys':
-                item += ' :red_car:'
-            
+            item += add_smile(item)
             items_dict[item] = str(value)
         result[mode] = [items_dict]
     # переделать условие
@@ -127,3 +108,25 @@ async def pubg_info(api_key, bot, shard, player_name, interest_mode,
                         for key, value in general_info[mode][0].items():
                             em_answer.add_field(name=key, value=value, inline=False)
                     await bot.say(embed=em_answer)
+
+def add_smile(item):
+    '''add discord smile to string'''
+    if item == 'winPoints':
+        return ' :trophy:'
+    elif item == 'wins':
+        return ' :first_place:'
+    elif item == 'top10s':
+        return ' :second_place:'
+        # return ' :top:'
+    elif item == 'assists':
+        return ' :handshake:'
+    elif item == 'longestKill':
+        return ''
+    elif item == 'maxKillStreaks':
+        return ''
+    elif item == 'roundMostKills':
+        return ''
+    elif item == 'suicides':
+        return ' :skull:'
+    elif item == 'vehicleDestroys':
+        return ' :red_car:'
