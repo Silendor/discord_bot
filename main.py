@@ -21,6 +21,7 @@ discord_log.log_to_file()
 
 description = '''Simple newsletter bot'''
 bot = commands.Bot(command_prefix='!', description=description)
+bot_id = '490361317262229541'
 
 @bot.event
 async def on_ready():
@@ -53,6 +54,13 @@ async def btc():
         response = await raw_response.text()
         response = json.loads(response)
         await bot.say("Bitcoin price is: $" + response['bpi']['USD']['rate'])
+
+@bot.command()
+async def link():
+    '''Выдаёт ссылку на добавление бота на сервер'''
+    url='https://discordapp.com/oauth2/authorize?client_id=490361317262229541&scope=bot'
+    await bot.say(url)
+
 ####
 # PUBG
 ####
