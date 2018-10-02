@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import os
 import json
-import random
 import aiohttp
 import discord
 from discord.ext import commands
@@ -35,15 +34,7 @@ async def on_ready():
 @bot.command(pass_context=True)
 async def hello(context):
     """Поднимает настроение"""
-    possible_responses = [
-        'Ты классный, {} :thumbsup:'.format(context.message.author.mention),
-        'Весь мир вертится вокруг тебя, {} :earth_asia:'.format(context.message.author.mention),
-        'За тобой выехали, {} :spy:'.format(context.message.author.mention),
-        'Сегодня повезёт, {} :four_leaf_clover:'.format(context.message.author.mention),
-        'Сегодня забухаем в :poop:, {}'.format(context.message.author.mention),
-        'Мне нечего тебе сказать, {} :robot:'.format(context.message.author.mention),
-    ]
-    await bot.say(random.choice(possible_responses))
+    await bf.hello_random(bot, context)
 
 @bot.command()
 async def btc():

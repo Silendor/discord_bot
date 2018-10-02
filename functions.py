@@ -1,5 +1,6 @@
 import os
 import json
+import random
 import requests
 import asyncio
 import discord
@@ -123,3 +124,15 @@ def add_smile(item):
         return ' :skull:'
     elif item == 'vehicleDestroys':
         return ' :red_car:'
+
+async def hello_random(bot, context):
+    '''selects a random response to the hello request'''
+    possible_responses = [
+        'Ты классный, {} :thumbsup:'.format(context.message.author.mention),
+        'Весь мир вертится вокруг тебя, {} :earth_asia:'.format(context.message.author.mention),
+        'За тобой выехали, {} :spy:'.format(context.message.author.mention),
+        'Сегодня повезёт, {} :four_leaf_clover:'.format(context.message.author.mention),
+        'Сегодня забухаем в :poop:, {}'.format(context.message.author.mention),
+        'Мне нечего тебе сказать, {} :robot:'.format(context.message.author.mention),
+    ]
+    await bot.say(random.choice(possible_responses))
