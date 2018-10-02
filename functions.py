@@ -97,20 +97,13 @@ async def pubg_info(api_key, bot, shard, player_name, interest_mode,
                     await bot.say(answer)
                 else:
                     for mode in general_info:
-                        title=mode
-                        if any(s in mode for s in ('squad-fpp', 'squad')):
-                            title += ' :family_mmbb:'
-                        elif any(s in mode for s in ('duo-fpp', 'duo')):
-                            title += ' :two_men_holding_hands:'
-                        elif any(s in mode for s in ('solo-fpp', 'solo')):
-                            title += ' :man:'
-                        em_answer = discord.Embed(title=title.capitalize(), description=player_name, color=0x50bdfe)
+                        em_answer = discord.Embed(title=mode.capitalize(), description=player_name, color=0x50bdfe)
                         for key, value in general_info[mode][0].items():
                             em_answer.add_field(name=key, value=value, inline=False)
                     await bot.say(embed=em_answer)
 
 def add_smile(item):
-    '''add discord smile to string'''
+    '''add discord smile to string where item from interest_items'''
     if item == 'winPoints':
         return ' :trophy:'
     elif item == 'wins':
