@@ -1,4 +1,5 @@
 import os
+# import logging
 import json
 import random
 import requests
@@ -15,6 +16,10 @@ cache_opts = {
 }
  
 cache = CacheManager(**parse_cache_config_options(cache_opts))
+
+# logging
+# logging.basicConfig(filename="bot_error.log",filemode="w" , level=logging.ERROR)
+# log = logging.getLogger("ex")
 
 def api_call(api_key, url):
     header = {
@@ -35,7 +40,9 @@ def get_player_info(api_key, shard, player_name):
     try:
         player_id = player_info['data'][0]['id']
     except KeyError:
-        player_id = player_info['errors'][0]['title']
+        # player_id = player_info['errors'][0]['title']
+        player_id = False
+        # log.exception("Invalid answer structure get_player_info")
     return player_id
 
 @cache.cache('get_season_func', type="file", expire=2592000)
@@ -45,13 +52,14 @@ def get_season_info(api_key, shard):
     # season_id = 'division.bro.official.2018-09'
     season_info = api_call(api_key, url_season)
     season_num = len(season_info['data'])
-    if season_info['data'][season_num-1]['attributes']['isCurrentSeason']:
+    try:
         season_id = season_info['data'][season_num-1]['id']
-    else:
-        season_id = 'Not Found'
+    except KeyError:
+        season_id = False
+        # log.exception("Invalid answer structure get_season_info")
     return season_id
 
-@cache.cache('get_season_func', type="file", expire=300)
+@cache.cache('get_general_stat_func', type="file", expire=300)
 def get_general_stat_info(api_key, shard, player_id, season_id,
                             interest_mode, interest_items):
     '''get info about user statistics'''
@@ -62,16 +70,31 @@ def get_general_stat_info(api_key, shard, player_id, season_id,
     items_dict = {}
     for mode in interest_mode:
         for item in interest_items:
-            value = general_info['data']['attributes']['gameModeStats'][mode].get(item)
-            # add smilies
+            try:
+                value = general_info['data']['attributes']['gameModeStats'][mode].get(item)
+            except KeyError:
+                value = ''
+                # log.exception("Invalid structure get_general_stat_info")
+            # add smilies to categories
             item += add_smile(item)
-            items_dict[item] = str(value)
+            items_dict[item] = value
         result[mode] = [items_dict]
-    # переделать условие
-    if str(value):
-        return result
-    else:
-        return 'Not Found'
+    return result
+
+async def check_result(bot, player_name, general_info):
+    '''handles errors and displays the result'''
+    for mode in general_info:
+        if all(value == 0 for value in general_info[mode][0].values()):
+            answer = 'Статистики по этому режиму нет.'
+            await bot.say(answer)
+        elif all(value == '' for value in general_info[mode][0].values()):
+            answer = 'Ошибка получения статистики.'
+            await bot.say(answer)
+        else:
+            em_answer = discord.Embed(title=mode.capitalize(), description=player_name, color=0x50bdfe)
+            for key, value in general_info[mode][0].items():
+                em_answer.add_field(name=key, value=value, inline=False)
+            await bot.say(embed=em_answer)
 
 async def pubg_info(api_key, bot, shard, player_name, interest_mode, 
                     interest_items, context):
@@ -81,27 +104,20 @@ async def pubg_info(api_key, bot, shard, player_name, interest_mode,
         await bot.say(answer)
     else:
         player_id = get_player_info(api_key, shard, player_name)
-        if player_id == 'Not Found':
+        if player_id is False:
             answer = 'Такой ник не найден в базе, {}'.format(context.message.author.mention)
             await bot.say(answer)
         else:
             season_id = get_season_info(api_key, shard)
-            if season_id == 'Not Found':
+            if season_id is False:
                 answer = 'Актуальный сезон не обнаружен'
                 await bot.say(answer)
             else:
+                # cache.invalidate(get_general_stat_info, 'get_general_stat_func')
                 general_info = get_general_stat_info(api_key, shard, player_id, 
                                                     season_id, interest_mode, 
                                                     interest_items)
-                if general_info == 'Not Found':
-                    answer = 'Никнейм найден, актуальный сезон найден, статистика почему-то недоступна :cry:, {}'.format(context.message.author.mention)
-                    await bot.say(answer)
-                else:
-                    for mode in general_info:
-                        em_answer = discord.Embed(title=mode.capitalize(), description=player_name, color=0x50bdfe)
-                        for key, value in general_info[mode][0].items():
-                            em_answer.add_field(name=key, value=value, inline=False)
-                    await bot.say(embed=em_answer)
+                await check_result(bot, player_name, general_info)
 
 def add_smile(item):
     '''add discord smile to string where item from interest_items'''
