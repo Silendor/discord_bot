@@ -83,7 +83,10 @@ def get_season_info(api_key, shard):
 def get_general_stat_info(api_key, shard, player_id, season_id,
                             interest_mode, interest_items):
     '''get info about user statistics'''
-    url_stat = 'https://api.pubg.com/shards/{}/players/{}/seasons/{}'.format(shard, player_id, season_id)
+    # old url before 03.10.2018
+    # url_stat = 'https://api.pubg.com/shards/{}/players/{}/seasons/{}'.format(shard, player_id, season_id)
+    # new url
+    url_stat = 'https://api.pubg.com/shards/{}/players/{}/seasons/{}'.format('steam', player_id, season_id)
     func_name = get_general_stat_info.__name__
     general_info, api_status = api_call(api_key, url_stat)
     log_api_calls(api_status, func_name)
@@ -99,6 +102,7 @@ def get_general_stat_info(api_key, shard, player_id, season_id,
                 # log.exception("Invalid structure get_general_stat_info")
             # add smilies to categories
             item += add_smile(item)
+
             items_dict[item] = value
         result[mode] = [items_dict]
     return (result, api_status)
@@ -161,8 +165,10 @@ async def bots_response_to_status(bot, api_status):
 
 def add_smile(item):
     '''add discord smile to string where item from interest_items'''
-    if item == 'winPoints':
+    if item == 'bestRankPoint':
         return ' :trophy:'
+    # if item == 'winPoints':
+    #     return ' :trophy:'
     elif item == 'wins':
         return ' :first_place:'
     elif item == 'top10s':
@@ -180,6 +186,8 @@ def add_smile(item):
         return ' :skull:'
     elif item == 'vehicleDestroys':
         return ' :red_car:'
+    else:
+        return ''
 
 async def hello_random(bot, context):
     '''selects a random response to the hello request'''

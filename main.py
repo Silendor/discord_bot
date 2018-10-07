@@ -63,10 +63,7 @@ async def squadfpp(context, player_name=' '):
     shard = 'pc-ru'
     # shard = 'pc-eu'
     interest_mode = ('squad-fpp',)
-    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
-                'longestKill', 'maxKillStreaks', 'roundMostKills', 
-                'suicides', 'vehicleDestroys')
-
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 @bot.command(pass_context=True, aliases=('squadtpp',))
@@ -76,10 +73,7 @@ async def squad(context, player_name=' '):
     shard = 'pc-ru'
     # shard = 'pc-eu'
     interest_mode = ('squad',)
-    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
-                'longestKill', 'maxKillStreaks', 'roundMostKills', 
-                'suicides', 'vehicleDestroys')
-
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 @bot.command(pass_context=True)
@@ -89,10 +83,7 @@ async def duofpp(context, player_name=' '):
     shard = 'pc-ru'
     # shard = 'pc-eu'
     interest_mode = ('duo-fpp',)
-    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
-                'longestKill', 'maxKillStreaks', 'roundMostKills', 
-                'suicides', 'vehicleDestroys')
-
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 @bot.command(pass_context=True, aliases=('duotpp',))
@@ -102,10 +93,7 @@ async def duo(context, player_name=' '):
     shard = 'pc-ru'
     # shard = 'pc-eu'
     interest_mode = ('duo',)
-    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
-                'longestKill', 'maxKillStreaks', 'roundMostKills', 
-                'suicides', 'vehicleDestroys')
-
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 @bot.command(pass_context=True)
@@ -115,10 +103,7 @@ async def solofpp(context, player_name=' '):
     shard = 'pc-ru'
     # shard = 'pc-eu'
     interest_mode = ('solo-fpp',)
-    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
-                'longestKill', 'maxKillStreaks', 'roundMostKills', 
-                'suicides', 'vehicleDestroys')
-
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 @bot.command(pass_context=True, aliases=('solotpp',))
@@ -127,11 +112,8 @@ async def solo(context, player_name=' '):
     api_key = os.environ.get('PUBG_API_SECRET')
     shard = 'pc-ru'
     # shard = 'pc-eu'
-    interest_mode = ('solo-fpp',)
-    interest_items = ('winPoints', 'wins', 'top10s', 'assists', 
-                'longestKill', 'maxKillStreaks', 'roundMostKills', 
-                'suicides', 'vehicleDestroys')
-
+    interest_mode = ('solo',)
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
 ################################################################
