@@ -128,8 +128,11 @@ async def check_result(bot, player_name, general_info):
             await bot.say(embed=em_answer)
 
 async def pubg_info(api_key, bot, shard, player_name, interest_mode, 
-                    interest_items, context):
+                    context):
     '''collect complex information about player'''
+    interest_items = ('bestRankPoint', 'rankPoints', 'wins', 'top10s', 'assists', 
+                    'headshotKills', 'longestKill', 'maxKillStreaks', 'revives', 
+                    'roundMostKills', 'suicides', 'teamKills', 'vehicleDestroys')
     if player_name is ' ':
         answer = 'Укажи никнейм, {}'.format(context.message.author.mention)
         await bot.say(answer)
