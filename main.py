@@ -14,8 +14,8 @@ import functions as bf
 
 # log settings
 logger_target = 'discord'
-# log_level = 'DEBUG'
-log_level = 'ERROR'
+log_level = 'DEBUG'
+# log_level = 'ERROR'
 discord_log = Bot_Logging(logger_target, log_level)
 discord_log.log_to_file()
 

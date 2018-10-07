@@ -11,6 +11,7 @@ class Bot_Logging():
         self.mode = 'w'
         self.log_format = '%(asctime)s:%(levelname)s:%(name)s: %(message)s'
         self.log_level = self.define_log_level(log_level)
+        logging.basicConfig(filename=self.filename, level=logging.ERROR)
         # self.log_to_file()
 
     def log_to_file(self):
