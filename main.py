@@ -69,7 +69,7 @@ async def squadfpp(context, player_name=' '):
 
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command(pass_context=True)
+@bot.command(pass_context=True, aliases=('squadtpp',))
 async def squad(context, player_name=' '):
     """pubg Cтатистика squad-tpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
@@ -95,7 +95,7 @@ async def duofpp(context, player_name=' '):
 
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command(pass_context=True)
+@bot.command(pass_context=True, aliases=('duotpp',))
 async def duo(context, player_name=' '):
     """pubg Cтатистика duo-tpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
@@ -121,7 +121,7 @@ async def solofpp(context, player_name=' '):
 
     await bf.pubg_info(api_key, bot, shard, player_name, interest_mode, interest_items, context)
 
-@bot.command(pass_context=True)
+@bot.command(pass_context=True, aliases=('solotpp',))
 async def solo(context, player_name=' '):
     """pubg Cтатистика solo-tpp игр по никнейму (RU)"""
     api_key = os.environ.get('PUBG_API_SECRET')
