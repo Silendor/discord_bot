@@ -57,7 +57,7 @@ def get_player_info(api_key, shard, player_name):
         player_id = player_info['data'][0]['id']
     except KeyError:
         # player_id = player_info['errors'][0]['title']
-        player_id = False
+        player_id = None
         # logging.error("Invalid answer structure get_player_info")
         # log.exception("Invalid answer structure get_player_info")
     return (player_id, api_status)
@@ -75,7 +75,7 @@ def get_season_info(api_key, shard):
     try:
         season_id = season_info['data'][season_num-1]['id']
     except KeyError:
-        season_id = False
+        season_id = None
         # log.exception("Invalid answer structure get_season_info")
     return (season_id, api_status)
 
@@ -140,14 +140,14 @@ async def pubg_info(api_key, bot, shard, player_name, interest_mode,
         # cache.invalidate(get_player_info, 'get_player_func')
         player_id, api_status = get_player_info(api_key, shard, player_name)
         await bots_response_to_status(bot, api_status)
-        if player_id is False:
+        if player_id is None:
             answer = 'Такой ник не найден в базе, {}'.format(context.message.author.mention)
             await bot.say(answer)
         else:
             # cache.invalidate(get_season_info, 'get_season_func')
             season_id, api_status = get_season_info(api_key, shard)
             await bots_response_to_status(bot, api_status)
-            if season_id is False:
+            if season_id is None:
                 answer = 'Актуальный сезон не обнаружен'
                 await bot.say(answer)
             else:
