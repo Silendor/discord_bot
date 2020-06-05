@@ -4,4 +4,3 @@ Simple bot for discord
 ## Общее описание:
 Бот предоставляет общую статистику игрока PUBG при запросе, которую он получает
 из официального [PUBG API](https://documentation.pubg.com/en/introduction.html).
-В планах добавление рассылки из [новостной ленты](https://www.pubg.com/ru/news/).
